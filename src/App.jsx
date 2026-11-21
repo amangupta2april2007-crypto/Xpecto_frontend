@@ -1,0 +1,147 @@
+import { Suspense, useState, useCallback, lazy, useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import { useLocation, useNavigate } from 'react-router';
+import { motion } from 'motion/react';
+import GlitchNav from './components/GlitchNav';
+import Loader from './components/Loader';
+import TvStaticTransition from './components/TvStaticTransition';
+import AppRoutes from './routes';
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [pathname]);
+  return null;
+}
+
+/** Skip button: portalled to <body> with the max z-index so no intro layer can cover it. */
+function SkipIntroButton({ onSkip }) {
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') onSkip(); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onSkip]);
+
+  return createPortal(
+    <button
+      type="button"
+      onClick={onSkip}
+      aria-label="Skip intro"
+      style={{
+        position: 'fixed',
+        top: 'calc(16px + env(safe-area-inset-top, 0px))',
+        right: 16,
+        zIndex: 2147483647,
+        pointerEvents: 'auto',
+        padding: '8px 16px',
+        fontFamily: "'Share Tech Mono', monospace",
+        fontSize: 13,
+        letterSpacing: '0.12em',
+        textTransform: 'uppercase',
+        color: '#fff',
+        background: 'rgba(0,0,0,0.6)',
+        border: '1px solid #19e6ff',
+        borderRadius: 999,
+        boxShadow: '0 0 12px rgba(25,230,255,0.45)',
+        cursor: 'pointer',
+      }}
+    >
+      Skip ›
+    </button>,
+    document.body
+  );
+}
+
+// Lazy-load heavy 3D components
+const SpaceTimeIntro = lazy(() => import('./components/SpaceTimeIntro'));
+const SpaceTimeBg = lazy(() => import('./components/SpaceTimeBg'));
+
+const KEY = 'xpecto_intro_seen';
+
+// Map routes to page keys for per-page 3D backgrounds
+const routeToPage = (pathname) => {
+  if (pathname === '/' || pathname.startsWith('/about')) return 'about';
+  if (pathname.startsWith('/events')) return 'events';
+  if (pathname.startsWith('/workshops')) return 'workshops';
+  if (pathname.startsWith('/qrs') || pathname.startsWith('/accommodation')) return 'qrs';
+  if (pathname.startsWith('/sponsors')) return 'sponsors';
+  if (pathname.startsWith('/team')) return 'team';
+  if (pathname.startsWith('/campus-ambassador')) return 'campus-ambassador';
+  if (pathname.startsWith('/profile') || pathname.startsWith('/me')) return 'profile';
+  if (pathname.startsWith('/auth')) return 'auth';
+  if (pathname.startsWith('/admin')) return 'admin';
+  return 'home';
+};
+
+/** Shell: 3D Space-Time intro + per-page backgrounds, glitch navbar, page transitions. */
+export default function App() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [intro, setIntro] = useState(() => !sessionStorage.getItem(KEY));
+  const [introGlitchTrigger, setIntroGlitchTrigger] = useState(0);
+
+  const finishIntro = useCallback(() => {
+    sessionStorage.setItem(KEY, '1');
+    setIntro(false);
+    setIntroGlitchTrigger(trigger => trigger + 1);
+  }, []);
+
+  const skipIntro = useCallback(() => {
+    finishIntro();
+    navigate('/about', { replace: true });
+  }, [finishIntro, navigate]);
+
+  const page = routeToPage(location.pathname);
+
+  return (
+    <div className="app-shell">
+      <ScrollToTop />
+      {!intro && <TvStaticTransition page={page} triggerKey={introGlitchTrigger} />}
+
+      {/* Per-page 3D background */}
+      {!intro && (
+        <Suspense fallback={null}>
+          <SpaceTimeBg page={page} dim={location.pathname !== '/'} />
+        </Suspense>
+      )}
+
+      {/* Vignette + grain overlays */}
+      <div className="st-vignette" />
+      <div className="st-grain" />
+
+      {/* 3D Intro (once per session) */}
+      {intro && (
+        <Suspense fallback={<div style={{ position: 'fixed', inset: 0, background: '#000', zIndex: 9999 }} />}>
+          <SpaceTimeIntro onDone={finishIntro} />
+        </Suspense>
+      )}
+
+      {intro && <SkipIntroButton onSkip={skipIntro} />}
+
+      {/* Navbar (hidden during intro) */}
+      {!intro && <GlitchNav />}
+
+      {/* Page content - Instantaneous navigation with sleek entrance */}
+      <main id="main" style={{ paddingTop: intro ? 0 : 60 }}>
+        <Suspense fallback={<Loader />}>
+          <motion.div
+            key={location.pathname}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.16, ease: 'easeOut' }}
+          >
+            <AppRoutes location={location} />
+          </motion.div>
+        </Suspense>
+      </main>
+
+      {!intro && (
+        <footer className="st-footer">
+          <p>XPECTO'27 · TECHFEST OF IIT MANDI · BROKEN SPACE-TIME EDITION</p>
+          <p style={{ marginTop: '.5rem', opacity: 0.5 }}>© 2027 All rights reserved</p>
+        </footer>
+      )}
+    </div>
+  );
+}
