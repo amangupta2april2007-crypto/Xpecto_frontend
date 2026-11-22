@@ -460,7 +460,7 @@ export default function SpaceTimeBg({ page = 'home', dim = false }) {
           }
           pos.needsUpdate = true;
         }
-      } else if (currentMode === 'about') {
+      } else {
         pageGroup.children.forEach((c, i) => {
           if (c.name.startsWith('aboutGear')) {
             c.rotation.z += (i % 2 === 0 ? 1 : -1) * 0.008;
