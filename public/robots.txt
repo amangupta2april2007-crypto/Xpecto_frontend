@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://xpecto.org/sitemap.xml
+Sitemap: https://www.xpecto.org/sitemap.xml

@@ -28,7 +28,7 @@ function Seo({ pathname }) {
       '/campus-ambassador': ['Campus Ambassador | XPECTO\'27', 'Become a XPECTO\'27 campus ambassador and represent IIT Mandi\'s techno-management fest.'],
     };
     const [title, description] = pages[pathname] || pages['/'];
-    const canonical = `https://xpecto.org${pathname === '/' ? '/' : pathname}`;
+    const canonical = `https://www.xpecto.org${pathname === '/' ? '/' : pathname}`;
 
     document.title = title;
     document.head.querySelector('meta[name="description"]')?.setAttribute('content', description);
