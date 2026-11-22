@@ -237,14 +237,7 @@ h1, h2, h3, h4, .st-hero-title, .st-page-title, .sec-title, .st-nav-logo, .st-se
 
 /* ---- Glitch Text ---- */
 .glitch-text { position: relative; display: inline-block; }
-.glitch-text::before, .glitch-text::after { content: attr(data-text); position: absolute; inset: 0;
-  overflow: hidden; clip-path: inset(0); opacity: 0; pointer-events: none; }
-.glitch-text:hover::before { content: attr(data-text); opacity: 1; animation: glitchTop .3s linear; color: var(--st-cyan); left: 2px; }
-.glitch-text:hover::after { content: attr(data-text); opacity: 1; animation: glitchBot .3s linear; color: var(--st-magenta); left: -2px; }
-@keyframes glitchTop { 0% { clip-path: inset(40% 0 0 0) } 20% { clip-path: inset(10% 0 60% 0) } 40% { clip-path: inset(50% 0 20% 0) }
-  60% { clip-path: inset(20% 0 40% 0) } 80% { clip-path: inset(60% 0 5% 0) } 100% { clip-path: inset(0) } }
-@keyframes glitchBot { 0% { clip-path: inset(0 0 40% 0) } 20% { clip-path: inset(60% 0 10% 0) } 40% { clip-path: inset(20% 0 50% 0) }
-  60% { clip-path: inset(40% 0 20% 0) } 80% { clip-path: inset(5% 0 60% 0) } 100% { clip-path: inset(0) } }
+.glitch-text::before, .glitch-text::after { content: none; display: none; }
 
 /* ---- Sponsor Section ---- */
 .st-sponsors { position: relative; z-index: 1; padding: 4rem 1rem 6rem; }
