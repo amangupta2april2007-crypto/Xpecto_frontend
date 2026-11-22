@@ -15,6 +15,42 @@ function ScrollToTop() {
   return null;
 }
 
+function Seo({ pathname }) {
+  useEffect(() => {
+    const pages = {
+      '/': ['XPECTO\'27 | Techfest of IIT Mandi', 'Discover XPECTO\'27 at IIT Mandi: competitions, workshops, events and fest registrations.'],
+      '/about': ['About XPECTO\'27 | IIT Mandi', 'Learn about XPECTO\'27, the annual techno-management fest of IIT Mandi.'],
+      '/events': ['Events | XPECTO\'27', 'Explore competitions and events at XPECTO\'27, the techfest of IIT Mandi.'],
+      '/workshops': ['Workshops | XPECTO\'27', 'Discover workshops and hands-on learning sessions at XPECTO\'27.'],
+      '/qrs': ['Accommodation | XPECTO\'27', 'Find accommodation and campus stay information for XPECTO\'27 at IIT Mandi.'],
+      '/sponsors': ['Sponsors | XPECTO\'27', 'Meet the sponsors supporting XPECTO\'27 at IIT Mandi.'],
+      '/team': ['Team | XPECTO\'27', 'Meet the team behind XPECTO\'27 at IIT Mandi.'],
+      '/campus-ambassador': ['Campus Ambassador | XPECTO\'27', 'Become a XPECTO\'27 campus ambassador and represent IIT Mandi\'s techno-management fest.'],
+    };
+    const [title, description] = pages[pathname] || pages['/'];
+    const canonical = `https://xpecto.org${pathname === '/' ? '/' : pathname}`;
+
+    document.title = title;
+    document.head.querySelector('meta[name="description"]')?.setAttribute('content', description);
+    document.head.querySelector('meta[name="robots"]')?.setAttribute('content', 'index, follow, max-image-preview:large');
+    document.head.querySelector('meta[property="og:title"]')?.setAttribute('content', title);
+    document.head.querySelector('meta[property="og:description"]')?.setAttribute('content', description);
+    document.head.querySelector('meta[property="og:url"]')?.setAttribute('content', canonical);
+    document.head.querySelector('meta[name="twitter:title"]')?.setAttribute('content', title);
+    document.head.querySelector('meta[name="twitter:description"]')?.setAttribute('content', description);
+
+    let canonicalLink = document.head.querySelector('link[rel="canonical"]');
+    if (!canonicalLink) {
+      canonicalLink = document.createElement('link');
+      canonicalLink.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonicalLink);
+    }
+    canonicalLink.setAttribute('href', canonical);
+  }, [pathname]);
+
+  return null;
+}
+
 /** Skip button: portalled to <body> with the max z-index so no intro layer can cover it. */
 function SkipIntroButton({ onSkip }) {
   useEffect(() => {
@@ -96,6 +132,7 @@ export default function App() {
 
   return (
     <div className="app-shell">
+      <Seo pathname={location.pathname} />
       <ScrollToTop />
       {!intro && <TvStaticTransition page={page} triggerKey={introGlitchTrigger} />}
 
