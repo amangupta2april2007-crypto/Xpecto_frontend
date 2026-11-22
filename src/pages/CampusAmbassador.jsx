@@ -37,7 +37,7 @@ export default function CampusAmbassador() {
         <p>Campus Ambassadors help spread fest updates, build participation, coordinate registrations, and connect their college community with XPECTO.</p>
         {submitted && <p className="banner-success" role="status">Application received. The team will contact you after review.</p>}
         {error && <ErrorState message={error} />}
-        <form onSubmit={submit}>
+        <form className="ca-form" onSubmit={submit}>
           <div className="field"><label htmlFor="ca-name">Full name</label><input id="ca-name" required value={form.name} onChange={e => set('name', e.target.value)} /></div>
           <div className="field"><label htmlFor="ca-email">Email</label><input id="ca-email" type="email" required value={form.email} onChange={e => set('email', e.target.value)} /></div>
           <div className="field"><label htmlFor="ca-phone">Phone</label><input id="ca-phone" type="tel" required value={form.phone} onChange={e => set('phone', e.target.value)} /></div>

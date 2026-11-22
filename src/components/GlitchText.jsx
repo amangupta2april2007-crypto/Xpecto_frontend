@@ -41,6 +41,7 @@ export default function GlitchText({ text, children, tag, as, className = '' }) 
 
   const handleMouseLeave = () => {
     clearInterval(intervalRef.current);
+    intervalRef.current = null;
     setDisplayText(rawText);
   };
 

@@ -395,9 +395,11 @@ export default function SpaceTimeBg({ page = 'home', dim = false }) {
       mouseX += (targetMouseX - mouseX) * 0.05;
       mouseY += (targetMouseY - mouseY) * 0.05;
 
-      camera.position.x = mouseX * 0.8;
-      camera.position.y = mouseY * 0.6 + (currentMode === 'events' ? 4 : currentMode === 'team' ? 3 : 0);
+      camera.position.x = mouseX * 3.2;
+      camera.position.y = mouseY * 2.2 + (currentMode === 'events' ? 4 : currentMode === 'team' ? 3 : 0);
       camera.lookAt(0, currentMode === 'events' ? 0 : currentMode === 'team' ? 0 : 0, 0);
+      pageGroup.rotation.y += (mouseX * 0.28 - pageGroup.rotation.y) * 0.055;
+      pageGroup.rotation.x += (-mouseY * 0.18 - pageGroup.rotation.x) * 0.055;
 
       // Page-specific updates
       if (currentMode === 'home') {

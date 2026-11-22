@@ -16,8 +16,8 @@
   --st-glow-cyan: 0 0 16px rgba(0,204,255,0.6);
   --st-glow-magenta: 0 0 14px rgba(255,0,102,0.5);
 
-  --st-font-display: 'Syncopate', 'Orbitron', sans-serif;
-  --st-font: 'Orbitron', 'Space Grotesk', sans-serif;
+  --st-font-display: 'Space Grotesk', 'Rajdhani', sans-serif;
+  --st-font: 'Space Grotesk', 'Rajdhani', sans-serif;
   --st-font-body: 'Space Grotesk', 'Rajdhani', sans-serif;
   --st-mono: 'Share Tech Mono', 'Courier New', monospace;
 
@@ -121,8 +121,8 @@ h1, h2, h3, h4, .st-hero-title, .st-page-title, .sec-title, .st-nav-logo, .st-se
 }
 
 /* ---- Hero Section (Matches 3D Intro Arrival Snapshot) ---- */
-.st-hero { position: relative; min-height: calc(100vh - 64px); display: flex; flex-direction: column; align-items: center; justify-content: center;
-  text-align: center; padding: 3rem 1.5rem 4rem; z-index: 1; gap: 0.9rem; }
+.st-hero { position: relative; min-height: calc(100vh - 64px); display: flex; flex-direction: column; align-items: flex-start; justify-content: center;
+  text-align: left; padding: 3rem clamp(1.5rem, 8vw, 8rem) 4rem; z-index: 1; gap: 0.9rem; }
 
 .st-hero-title { font: 900 clamp(3.2rem, 10vw, 7.5rem)/1 var(--st-font-display); color: #fff; letter-spacing: .06em; margin: 0;
   text-shadow: 0 0 30px rgba(0,204,255,0.7), 0 0 70px rgba(0,204,255,0.25), 0 4px 0 rgba(255,0,102,0.4); }
@@ -169,7 +169,7 @@ h1, h2, h3, h4, .st-hero-title, .st-page-title, .sec-title, .st-nav-logo, .st-se
 
 /* ---- Cyber Countdown Timer Overrides ---- */
 .st-countdown-wrapper { margin: 0.6rem 0 1rem; }
-.countdown { display: flex; gap: 1rem; justify-content: center; margin: 0 !important; }
+.countdown { display: flex; gap: 1rem; justify-content: flex-start; margin: 0 !important; }
 .countdown div { min-width: 72px; padding: 0.8rem 0.6rem;
   background: rgba(5,14,26,0.72) !important;
   border: 1px solid rgba(0,204,255,0.35) !important;
@@ -238,9 +238,9 @@ h1, h2, h3, h4, .st-hero-title, .st-page-title, .sec-title, .st-nav-logo, .st-se
 /* ---- Glitch Text ---- */
 .glitch-text { position: relative; display: inline-block; }
 .glitch-text::before, .glitch-text::after { content: attr(data-text); position: absolute; inset: 0;
-  overflow: hidden; clip-path: inset(0); }
-.glitch-text:hover::before { animation: glitchTop .3s linear; color: var(--st-cyan); left: 2px; }
-.glitch-text:hover::after { animation: glitchBot .3s linear; color: var(--st-magenta); left: -2px; }
+  overflow: hidden; clip-path: inset(0); opacity: 0; pointer-events: none; }
+.glitch-text:hover::before { content: attr(data-text); opacity: 1; animation: glitchTop .3s linear; color: var(--st-cyan); left: 2px; }
+.glitch-text:hover::after { content: attr(data-text); opacity: 1; animation: glitchBot .3s linear; color: var(--st-magenta); left: -2px; }
 @keyframes glitchTop { 0% { clip-path: inset(40% 0 0 0) } 20% { clip-path: inset(10% 0 60% 0) } 40% { clip-path: inset(50% 0 20% 0) }
   60% { clip-path: inset(20% 0 40% 0) } 80% { clip-path: inset(60% 0 5% 0) } 100% { clip-path: inset(0) } }
 @keyframes glitchBot { 0% { clip-path: inset(0 0 40% 0) } 20% { clip-path: inset(60% 0 10% 0) } 40% { clip-path: inset(20% 0 50% 0) }
@@ -303,8 +303,9 @@ h1, h2, h3, h4, .st-hero-title, .st-page-title, .sec-title, .st-nav-logo, .st-se
 /* ---- Scrollbar ---- */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--st-void); }
-::-webkit-scrollbar-thumb { background: rgba(0,255,136,0.25); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(0,255,136,0.45); }
+::-webkit-scrollbar-thumb { background: rgba(0,204,255,0.55); border: 1px solid rgba(0,255,136,0.22); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0,255,136,0.75); }
+html { scrollbar-color: rgba(0,204,255,0.55) var(--st-void); scrollbar-width: thin; }
 
 /* ---- Footer override ---- */
 .st-footer { position: relative; z-index: 1; padding: 2rem 1rem; text-align: center; border-top: 1px solid rgba(0,255,136,0.1);
@@ -549,4 +550,114 @@ button.st-nav-link { background: none; border: 0; padding: 0; font-family: inher
 @media (max-width: 1100px) {
   .st-nav-links { display: none; }
   .st-hamburger { display: block; }
+}
+
+/* Final visual-system overrides: keep the broken-space-time UI readable and consistent */
+.st-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 72% 48%, rgba(0,204,255,.10), transparent 14%),
+    radial-gradient(circle at 72% 48%, transparent 0 22%, rgba(0,255,136,.07) 22.2%, transparent 22.5%),
+    linear-gradient(rgba(0,204,255,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,204,255,.025) 1px, transparent 1px);
+  background-size: auto, auto, 64px 64px, 64px 64px;
+  mask-image: linear-gradient(90deg, transparent 18%, #000 48%, #000 100%);
+}
+
+.st-bg::after {
+  content: 'TIMELINE // 27.18  /  REALITY // STABLE';
+  position: absolute;
+  right: 2.2rem;
+  bottom: 1.8rem;
+  color: rgba(0,255,136,.42);
+  font: 600 .68rem var(--st-mono);
+  letter-spacing: .16em;
+  text-shadow: var(--st-glow-green);
+}
+
+h1, h2, h3, h4,
+.st-hero-title, .st-page-title, .st-nav-logo,
+.st-section-heading, .sec-title, .countdown b {
+  font-family: var(--st-font-display) !important;
+}
+
+body, button, input, textarea, select,
+.st-nav-link, .st-hero-sub, .st-hero-badge, .st-btn-cyber,
+.hl-head h3, .hl-cat, .hl-prime, .fcard-body, .wrow {
+  font-family: var(--st-font-body);
+}
+
+.st-hero-badge,
+.st-hero-badge span,
+.st-hero-sub,
+.st-scroll-cue,
+.countdown span {
+  font-family: var(--st-mono);
+}
+
+@media (max-width: 760px) {
+  .st-hero {
+    align-items: center;
+    text-align: center;
+    padding: 3rem 1rem 4rem;
+  }
+  .countdown { justify-content: center; }
+  .st-bg::after { display: none; }
+}
+
+/* Campus ambassador: visually distinct, grouped fields */
+.ca-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+.ca-form .field {
+  margin: 0;
+  padding: 1rem;
+  background: rgba(5,14,26,.72);
+  border: 1px solid rgba(0,204,255,.22);
+  border-left: 3px solid rgba(0,255,136,.62);
+  border-radius: 6px;
+  box-shadow: inset 0 0 18px rgba(0,204,255,.035);
+}
+.ca-form .field label {
+  margin-bottom: .15rem;
+  color: #b9f8ef;
+  font: 700 .78rem var(--st-font);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.ca-form .field input,
+.ca-form .field textarea {
+  width: 100%;
+  min-height: 46px;
+  background: rgba(2,7,18,.92);
+  border: 1px solid rgba(0,204,255,.28);
+  border-radius: 4px;
+  padding: .65rem .75rem;
+}
+.ca-form .field textarea {
+  min-height: 118px;
+  resize: vertical;
+}
+.ca-form .field:nth-of-type(9),
+.ca-form .field:nth-of-type(10),
+.ca-form > button {
+  grid-column: 1 / -1;
+}
+.ca-form > button {
+  justify-self: start;
+  margin-top: .25rem;
+}
+@media (max-width: 700px) {
+  .ca-form { grid-template-columns: 1fr; gap: .75rem; }
+  .ca-form .field,
+  .ca-form .field:nth-of-type(9),
+  .ca-form .field:nth-of-type(10),
+  .ca-form > button { grid-column: 1; }
+  .ca-form > button { width: 100%; }
 }
